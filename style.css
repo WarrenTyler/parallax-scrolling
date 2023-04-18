@@ -8,12 +8,25 @@ body {
   background: black;
 }
 
-#canvas {
+#container {
   position: absolute;
-  border: 3px solid white;
+  width: 800px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+}
+
+#canvas {
+  position: relative;
   width: 800px;
   height: 700px;
+}
+
+#speedSlider {
+  width: 100%;
+}
+
+p {
+  color: white;
 }
