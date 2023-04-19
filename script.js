@@ -1,4 +1,11 @@
+// dom elements
 const canvas = document.querySelector("#canvas");
+const speedSlider = document.querySelector("#speedSlider");
+const displaySpeed = document.querySelector("#displaySpeed");
+
+let scrollSpeed = speedSlider.value;
+displaySpeed.textContent = scrollSpeed;
+
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext("2d");
 
@@ -15,9 +22,6 @@ const backgroundLayer4 = new Image();
 backgroundLayer4.src = "./img/layer-4.png";
 const backgroundLayer5 = new Image();
 backgroundLayer5.src = "./img/layer-5.png";
-
-// scrolling variables
-let scrollSpeed = 10;
 
 class Layer {
   constructor(image, speedModifier) {
@@ -66,4 +70,12 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+// Start animation loop
 animate();
+
+// Event Listeners
+speedSlider.addEventListener("change", (e) => {
+  const newSpeed = e.target.value;
+  scrollSpeed = newSpeed;
+  displaySpeed.textContent = newSpeed;
+});
