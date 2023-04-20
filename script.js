@@ -3,6 +3,8 @@ const canvas = document.querySelector("#canvas");
 const speedSlider = document.querySelector("#speedSlider");
 const displaySpeed = document.querySelector("#displaySpeed");
 
+let worldX = 0;
+
 let scrollSpeed = speedSlider.value;
 displaySpeed.textContent = scrollSpeed;
 
@@ -29,25 +31,26 @@ class Layer {
     this.y = 0;
     this.width = 2400;
     this.height = 700;
-    this.x2 = this.width;
     this.image = image;
     this.speedModifier = speedModifier;
     this.speed = scrollSpeed * speedModifier;
   }
   update() {
     this.speed = scrollSpeed * this.speedModifier;
-    if (this.x <= -this.width) {
-      this.x = this.width + this.x2 - this.speed;
-    }
-    if (this.x2 <= -this.width) {
-      this.x2 = this.width + this.x - this.speed;
-    }
-    this.x = Math.floor(this.x - this.speed);
-    this.x2 = Math.floor(this.x2 - this.speed);
+    this.x = Math.floor(
+      (worldX * this.speedModifier - this.speed) % this.width
+    );
+    // console.log(this.x, worldX);
   }
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    ctx.drawImage(this.image, this.x2, this.y, this.width, this.height);
+    ctx.drawImage(
+      this.image,
+      this.width + this.x,
+      this.y,
+      this.width,
+      this.height
+    );
   }
 }
 
@@ -66,7 +69,7 @@ function animate() {
     background.update();
     background.draw();
   });
-
+  worldX -= scrollSpeed;
   requestAnimationFrame(animate);
 }
 
