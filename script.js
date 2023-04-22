@@ -2,17 +2,22 @@
 const canvas = document.querySelector("#canvas");
 const speedSlider = document.querySelector("#speedSlider");
 const displaySpeed = document.querySelector("#displaySpeed");
-
-let worldX = 0;
-
-let scrollSpeed = speedSlider.value;
-displaySpeed.textContent = scrollSpeed;
+const displayWorldX = document.querySelector("#displayWorldX");
 
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext("2d");
 
 const CANVAS_WIDTH = (canvas.width = 800);
 const CANVAS_HEIGHT = (canvas.height = 700);
+
+const worldStart = 0;
+// worldEnd must be a multiple of image width (2400) and greater than 
+// image width divided by slowest speed modifier (2400 / 0.2) or (2400 * 5)
+const worldEnd = Math.pow(2400, 3);
+let worldX = 0;
+
+let scrollSpeed = Number(speedSlider.value);
+displaySpeed.textContent = scrollSpeed;
 
 const backgroundLayer1 = new Image();
 backgroundLayer1.src = "./img/layer-1.png";
@@ -33,13 +38,9 @@ class Layer {
     this.height = 700;
     this.image = image;
     this.speedModifier = speedModifier;
-    this.speed = scrollSpeed * speedModifier;
   }
   update() {
-    this.speed = scrollSpeed * this.speedModifier;
-    this.x = Math.floor(
-      (worldX * this.speedModifier - this.speed) % this.width
-    );
+    this.x = -Math.floor((worldX * this.speedModifier) % this.width);
     // console.log(this.x, worldX);
   }
   draw() {
@@ -69,7 +70,12 @@ function animate() {
     background.update();
     background.draw();
   });
-  worldX -= scrollSpeed;
+
+  worldX += scrollSpeed;
+  if (worldX < 0) worldX = worldEnd;
+  if (worldX > worldEnd) worldX = 0;
+  displayWorldX.textContent = worldX;
+
   requestAnimationFrame(animate);
 }
 
@@ -78,7 +84,7 @@ animate();
 
 // Event Listeners
 speedSlider.addEventListener("change", (e) => {
-  const newSpeed = e.target.value;
+  const newSpeed = Number(e.target.value);
   scrollSpeed = newSpeed;
   displaySpeed.textContent = newSpeed;
 });
