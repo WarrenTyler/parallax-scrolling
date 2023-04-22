@@ -5,3 +5,5 @@ An infinite parallax side scrolling template for use in games and graphics appli
 Created using vanilla JavaScript with Canvas API.
 
 ## Currently in Development
+
+[Live Demo](https://warrentyler.github.io/parallax-scrolling/)
